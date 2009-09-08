@@ -3,10 +3,6 @@
  * foo-mvc
  * Lightweight MVC framework
  * @author Karen Ziv <karen@perlessence.com>
- * @todo create method to load a model
- * @todo allow controllers to overwrite the default view
- * @todo allow controllers to do partial views (view forwarding?)
- * @todo add router
  **/
 FooMVC::dispatch();
 
@@ -14,13 +10,14 @@ FooMVC::dispatch();
  * Pretty debug output
  **/
 function print_h($var) {
-
     echo "<pre>";
     print_r($var);
     echo "</pre>";
-
 }
 
+/**
+ * Core class
+ **/
 class FooMVC {
 
     protected static $router; // Router object
@@ -36,14 +33,16 @@ class FooMVC {
     protected static $suffix_view       = '_View';
 
     protected static $current_view; // Name of the view to be rendered
-    
+
+    /**
+     * This is a static class and as such should never be instantiated
+     **/
     public function __construct() {
-        throw new Exception("FooMVC is a static class");
+        throw new Exception(__CLASS__ . " is a static class");
     }
     
     /**
      * Main dispatcher
-     * Loads the initial controller
      **/
     public static function dispatch() {
 
@@ -213,4 +212,3 @@ abstract class FooMVCModel {}
  * Base class of all FooMVC views
  **/
 abstract class FooMVCView {}
-
