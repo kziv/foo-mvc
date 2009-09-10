@@ -151,6 +151,33 @@ class FooMVC {
         $view->render();
         
     }
+
+    /**
+     * Loads and validates a model
+     * @param  string Name of model (e.g. Object)
+     * @return string Class name of validated and included model
+     **/
+    public static function loadModel($model_name) {
+        
+        // Load the model file
+        $model_name = strtolower($model_name);
+        $model_path = self::$dir_models . str_replace('_', '/', $model_name) . '.php';
+        if (!file_exists($model_path)) {
+            throw new FooMVCDispatchException("Model file expected at '$model_path'");
+        }
+        require_once $model_path;
+
+        // Validate the model
+        $model_name = $model_name . self::$suffix_model;
+        if (!class_exists($model_name)) { // Class is in the file
+            throw new FooMVCDispatchException("Model '$model_name' expected at '$model_path'");
+        }
+        if (!is_subclass_of($model_name, 'FooMVCModel')) { // Model extends base model
+            throw new FooMVCDispatchException ("Model '$model_name' must extend FooMVCModel");
+        }
+        return $model_name;
+    }
+    
 }
 
 /**
@@ -188,7 +215,7 @@ abstract class FooMVCController {
      * @param mixed
      **/
     public final function setData($key, $val) {
-        $this->view->setData($key, $val);
+        
     }
 
     /**
@@ -198,6 +225,14 @@ abstract class FooMVCController {
      **/
     public final function setView($view_name) {
 
+    }
+
+    /**
+     * Loads a model for use in a controller
+     **/
+    public final function loadModel($model_name) {
+        $model_name = str_replace('.', '_', $model_name);
+        return FooMVC::loadModel($model_name);
     }
 
     
@@ -211,4 +246,8 @@ abstract class FooMVCModel {}
 /**
  * Base class of all FooMVC views
  **/
-abstract class FooMVCView {}
+abstract class FooMVCView {
+
+    protected $data = array(); // Data packet to send to template
+    
+}
