@@ -32,7 +32,7 @@ class FooMVC {
     protected static $suffix_model      = '_Model';
     protected static $suffix_view       = '_View';
 
-    protected static $current_view; // Name of the view to be rendered
+    public static $current_view; // Name of the view to be rendered
 
     /**
      * This is a static class and as such should never be instantiated
@@ -129,6 +129,7 @@ class FooMVC {
     public static function runView() {
 
         // Load the view file
+        self::$current_view = strtolower(self::$current_view);
         $view_path = self::$dir_views . str_replace('_', '/', self::$current_view) . '.php';
         if (!file_exists($view_path)) {
             throw new FooMVCDispatchException("View file expected at '$view_path'");
@@ -220,21 +221,22 @@ abstract class FooMVCController {
 
     /**
      * Overrides the default view for this controller
-     * @param string Name of 
-     * @todo write this method
+     * @param string Name of view in dot notation (e.g. Foo.Bar would be view Bar in folder views/foo)
      **/
     public final function setView($view_name) {
-
+        $view_name = str_replace('.', '_', $view_name);
+        FooMVC::$current_view = $view_name;
     }
 
     /**
      * Loads a model for use in a controller
+     * @param  string Model name in dot notation (e.g. Foo.Bar would be model Bar in folder models/foo)
+     * @return string Name of model class
      **/
     public final function loadModel($model_name) {
         $model_name = str_replace('.', '_', $model_name);
         return FooMVC::loadModel($model_name);
     }
-
     
 }
 
