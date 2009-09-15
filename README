@@ -1,0 +1,37 @@
+FOO-MVC
+
+NAME
+
+    foo-mvc - a lightweight MVC framework for PHP5
+
+SYNOPSIS
+
+    Many MVC frameworks try to be everything to everyone. foo-mvc gives you
+    the basics of managing controllers, models, and views and lets you plug
+    in anything else you want (router, db layer).
+
+    
+DESCRIPTION
+
+    foo-mvc is based on the idea that everyone has their favorite tools and
+    a framework that forces you to use theirs kinda sucks.
+
+    The core FooMVC class is a simple dispatcher. It's designed to work with
+    the Router class (URL => controller mapper) but if you prefer your own
+    router syntax, use that instead and just pass the controller name to
+    FooMVC.
+
+    Another component of most MVC frameworks is a database abstraction layer.
+    foo-mvc doesn't come bundled with one, so you can plug in your favorite
+    db layer by extending the core model.
+                         
+DEPENDENCIES
+
+    foo-mvc was written for PHP5 or greater. To use foo-mvc, you will need to first set up
+    your index file, and then configure your web server to rewrite all requests to this file.
+
+AUTHOR
+
+    Karen Ziv <karen@perlessence.com>
+    Send bug reports or comments to the above address.
+    For more information, see the foo-mvc homepage at http://wiki.github.com/foobarbazquux/foo-mvc
