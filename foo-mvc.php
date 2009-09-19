@@ -4,7 +4,6 @@
  * Lightweight MVC framework
  * @author Karen Ziv <karen@perlessence.com>
  **/
-FooMVC::dispatch();
 
 /**
  * Pretty debug output
@@ -20,10 +19,9 @@ function print_h($var) {
  **/
 class FooMVC {
 
-    protected static $router; // Router object
+    protected static $route_file;            // Path to router
 
-    protected static $base_url = '/foo-mvc'; // The base URL path of the FooMVC instance (after the domain name). This is usually empty.
-    protected static $base_path;             // Absolute path to the location of FooMVC
+    protected static $base_url;              // The base URL path of the FooMVC instance (after the domain name). This is usually empty.
     protected static $dir_controllers;       // Absolute path to the controllers directory
     protected static $dir_models;            // Absolute path to the models directory
     protected static $dir_views;             // Absolute path to the views directory
@@ -43,29 +41,31 @@ class FooMVC {
     
     /**
      * Main dispatcher
+     * @param string Path to application files relative to the foo-mvc base
      **/
-    public static function dispatch() {
-        
-        self::$base_path       = dirname(__FILE__);
-        self::$dir_controllers = self::$base_path . '/controllers/';
-        self::$dir_models      = self::$base_path . '/models/';
-        self::$dir_views       = self::$base_path . '/views/';
-        
-        // Basic routing
-        // TODO - replace with Router class
-        // Get the rest of the URL after any base_url values
-        if (self::$base_url) {
-            $path = substr($_SERVER['REQUEST_URI'], strlen(self::$base_url));
+    public static function dispatch($app_path=NULL) {
+
+        $app_path              = dirname(__FILE__) . '/apps' . ($app_path ? '/' . $app_path : '');
+        self::$dir_controllers = $app_path . '/controllers/';
+        self::$dir_models      = $app_path . '/models/';
+        self::$dir_views       = $app_path . '/views/';
+
+        if (!self::$route_file) {
+            self::$route_file = $app_path. '/routes.ini';
         }
-        $router = new Router;
-        $controller_name = $router->url2controller($path);
-        print_h($controller_name);
+        
+        $router = new Router(self::$route_file);
+        $controller_name = $router->url2controller($_SERVER['REQUEST_URI']);
         $controller_name = str_replace('.', '_', $controller_name);
         self::forward($controller_name);
 
         self::runView();
     }
 
+    public function setRouteFile($path) {
+        self::$route_file = $path;
+    }
+    
     /**
      * Switches to another controller from the current one
      * @param string Name of controller to run (e.g. 'Foo_Bar');
@@ -355,7 +355,7 @@ class Router {
      * @return string Controller name
      **/
     public function url2controller($url, $path_fallback=TRUE) {
-
+        
         // Split the URL on slashes and remove empty entries
         $tokenized_url = explode('/', $url);
         $tokenized_url = array_filter($tokenized_url, 'strlen');
