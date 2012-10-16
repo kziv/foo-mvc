@@ -265,7 +265,7 @@ class Router {
   public function __construct($ini_path=NULL) {
     // Set the default routes path
     if (!$ini_path) {
-      $ini_path = dirname(__FILE__) . '/routes.ini';
+      $ini_path = FOO_MVC_BASE_PATH . '/routes.ini';
     }
     $this->loadRoutesFile($ini_path);
   }
