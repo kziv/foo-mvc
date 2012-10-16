@@ -6,7 +6,7 @@
  */
 
 // Make sure the base path is defined
-defined('FOO_MVC_BASE_PATH') or define('FOO_MVC_BASE_PATH', 'apps');
+//defined('FOO_MVC_BASE_PATH') or define('FOO_MVC_BASE_PATH', 'apps');
 
 /**
  * Pretty debug output
@@ -44,7 +44,9 @@ class FooMVC {
 
   /**
    * Main dispatcher
-   * @param string Path to application files relative to the foo-mvc base
+   *
+   * @param string
+   *   Path to the specific application relative to the foo-mvc app dir base
    */
   public static function dispatch($app_path=NULL) {
 
@@ -73,10 +75,13 @@ class FooMVC {
 
   /**
    * Switches to another controller from the current one
-   * @param string Name of controller to run (e.g. 'Foo_Bar');
-   * @param bool   Whether or not to return to the current controller when the new one is done
+   *
+   * @param string
+   *   Name of controller to run (e.g. 'Foo_Bar');
+   * @param bool
+   *   Whether or not to return to the current controller when the new one is done
    */
-  public static function forward($controller, $return=FALSE) {
+  public static function forward($controller, $return = FALSE) {
 
     // If we're not returning, the
     if (!$return) {
@@ -99,8 +104,12 @@ class FooMVC {
    * Ensures that a controller file exists, loads the controller file,
    * ensures that it is properly named and extends the base class and
    * has the action() method
-   * @param  string Controller name (e.g. Foo_Bar)
-   * @return string Validated controller name (e.g. Foo_Bar_Controller)
+   *
+   * @param string
+   *   Controller name (e.g. Foo_Bar)
+   *
+   * @return string
+   *   Validated controller name (e.g. Foo_Bar_Controller)
    */
   public static function loadController($controller_name) {
 
@@ -153,6 +162,7 @@ class FooMVC {
       throw new FooMVCDispatchException ("View '$view_name' has no render() method");
     }
 
+    // Load the view class and render
     $view = new $view_name();
     $view->render();
 
@@ -160,8 +170,12 @@ class FooMVC {
 
   /**
    * Loads and validates a model
-   * @param  string Name of model (e.g. Object)
-   * @return string Class name of validated and included model
+   *
+   * @param string
+   *   Name of model (e.g. Object)
+   *
+   * @return string
+   *   Class name of validated and included model
    */
   public static function loadModel($model_name) {
 
@@ -202,8 +216,11 @@ abstract class FooMVCController {
 
   /**
    * Transfers the controller action to a new controller
-   * @param string Name of controller to switch to (e.g. Foo.Bar)
-   * @param bool   Whether or not to return to the previous controller when complete (default: FALSE)
+   *
+   * @param string
+   *   Name of controller to switch to (e.g. Foo.Bar)
+   * @param bool
+   *   Whether or not to return to the previous controller when complete (default: FALSE)
    */
   protected final function forward($controller_name, $return=FALSE) {
     $controller_name = str_replace('.', '_', $controller_name);
@@ -217,6 +234,7 @@ abstract class FooMVCController {
 
   /**
    * Passes a variable to the view data container
+   *
    * @param string
    * @param mixed
    */
@@ -226,7 +244,9 @@ abstract class FooMVCController {
 
   /**
    * Overrides the default view for this controller
-   * @param string Name of view in dot notation (e.g. Foo.Bar would be view Bar in folder views/foo)
+   *
+   * @param string
+   *   Name of view in dot notation (e.g. Foo.Bar would be view Bar in folder views/foo)
    */
   public final function setView($view_name) {
     $view_name = str_replace('.', '_', $view_name);
@@ -235,8 +255,12 @@ abstract class FooMVCController {
 
   /**
    * Loads a model for use in a controller
-   * @param  string Model name in dot notation (e.g. Foo.Bar would be model Bar in folder models/foo)
-   * @return string Name of model class
+   *
+   * @param string
+   *   Model name in dot notation (e.g. Foo.Bar would be model Bar in folder models/foo)
+   *
+   * @return string
+   *   Name of model class
    */
   public final function loadModel($model_name) {
     $model_name = str_replace('.', '_', $model_name);
