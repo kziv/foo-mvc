@@ -291,6 +291,31 @@ abstract class FooMVCView {
     }
   }
 
+  public static function renderTemplate($template_path, $data = array()) {
+    extract($data);
+    ob_start();
+    include $template_path;
+    echo ob_get_clean();
+  }
+
+  /**
+   * Renders a template and returns the content as a string.
+   *
+   * @param string
+   *   Path to the template file to include
+   * @param hash
+   *   Variables to set in the local template scope
+   *
+   * @return string
+   *   Rendered template content
+   */
+  public static function renderTemplateToString($template_path, $data = array()) {
+    extract($data);
+    ob_start();
+    include $template_path;
+    return ob_get_clean();
+  }
+
   /**
    * Main rendering block. Must be implemented by child class.
    */
