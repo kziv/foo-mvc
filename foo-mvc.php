@@ -5,9 +5,6 @@
  * @author Karen Ziv <me@karenziv.com>
  */
 
-// Make sure the base path is defined
-//defined('FOO_MVC_BASE_PATH') or define('FOO_MVC_BASE_PATH', 'apps');
-
 /**
  * Pretty debug output
  */
@@ -35,6 +32,8 @@ class FooMVC {
 
   public static $current_view; // Name of the view to be rendered
 
+  protected static $current_url = array(); // Parsed URL
+
   /**
    * This is a static class and as such should never be instantiated
    */
@@ -60,7 +59,8 @@ class FooMVC {
     }
 
     $router = new Router(self::$route_file);
-    if (!$controller_name = $router->url2controller($_SERVER['REQUEST_URI'])) {
+    self::$current_url = parse_url($_SERVER['REQUEST_URI']);
+    if (!$controller_name = $router->url2controller(self::$current_url['path'])) {
       throw new FooMVCDispatchException("No controller specified for this route.");
     }
     $controller_name = str_replace('.', '_', $controller_name);
@@ -160,7 +160,7 @@ class FooMVC {
     }
 
     // Load the view class and render
-    $view = new $view_name();
+    $view = new $view_name(self::$current_url);
     $view->render();
 
   }
@@ -276,7 +276,20 @@ abstract class FooMVCModel {}
  */
 abstract class FooMVCView {
 
-  protected $data = array(); // Data packet to send to template
+  protected $data = array();  // Data packet to send to template
+  protected $path;            // URL path after domain name (result of parse_url)
+  protected $query = array(); // URL query string parameters as hash
+
+  public function __construct($url = NULL) {
+    // Populate the URL data vars if not passed in
+    if (!$url) {
+      $url = parse_url($_SERVER['REQUEST_URI']);
+    }
+    $this->path = $url['path'];
+    if (isset($url['query'])) {
+      parse_str($url['query'], $this->query);
+    }
+  }
 
   /**
    * Main rendering block. Must be implemented by child class.
