@@ -116,7 +116,7 @@ class FooMVC {
     $controller_name = strtolower($controller_name);
 
     // Load the controller file
-    $controller_path = self::$dir_controllers . str_replace('_', '/', $controller_name) . '.php';
+    $controller_path = self::$dir_controllers . str_replace('_', '/', $controller_name) . '.inc';
     if (!file_exists($controller_path)) {
       throw new FooMVCDispatchException("Controller file expected at '$controller_path'");
     }
@@ -294,8 +294,11 @@ class Router {
 
   /**
    * Loads a router file and parses the route map for reading
-   * @param  string Path (absolute or relative) to routes file
-   * @throws RouterException if file isn't found
+   *
+   * @param string
+   *  Path (absolute or relative) to routes file
+   *
+   * @throws RouterException
    */
   protected function loadRoutesFile($ini_path) {
 
@@ -374,12 +377,22 @@ class Router {
   /**
    * Finds the controller for a given URL
    * Also populates the $urlparams variable
-   * @param  string URL to find a controller for
-   * @params bool   If a route isn't found, use the URL as the controller name (e.g. foo/bar => Foo_Bar)
-   This allows you to use routes.ini only for routes that deviate from that pattern
-   * @return string Controller name
+   *
+   * @param string
+   *   URL to find a controller for
+   * @param bool
+   *   If a route isn't found, use the URL as the controller name (e.g. foo/bar => Foo_Bar)
+   *   This allows you to use routes.ini only for routes that deviate from that pattern
+   *
+   * @return string
+   *   Controller name
    */
-  public function url2controller($url, $path_fallback=TRUE) {
+  public function url2controller($url, $path_fallback = TRUE) {
+
+    // If the URL is the index page, force a controller name
+    if ($url == '/') {
+      $url = 'index';
+    }
 
     // Split the URL on slashes and remove empty entries
     $tokenized_url = explode('/', $url);
@@ -389,7 +402,7 @@ class Router {
 
     // Create the fallback controller
     $fallback = $path_fallback ? implode('_', $tokenized_url) : FALSE;
-
+    ($fallback);
     // For each part of the URL...
     foreach ($tokenized_url as $i => $token) {
 
