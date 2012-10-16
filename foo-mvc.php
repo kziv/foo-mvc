@@ -294,7 +294,7 @@ abstract class FooMVCView {
   /**
    * Main rendering block. Must be implemented by child class.
    */
-  abstract function render();
+  abstract function render($data = array());
 }
 
 class Router {
@@ -321,7 +321,7 @@ class Router {
       throw new RouterException("Router file expected at '$ini_path'");
     }
     $routes = parse_ini_file($ini_path);
-    print_h($routes); // DEBUG
+    //print_h($routes); // DEBUG
 
     // For each route...
     foreach ($routes as $raw_route => $controller) {
@@ -384,7 +384,7 @@ class Router {
 
     }
 
-    print_h($this->routes); // DEBUG
+    //print_h($this->routes); // DEBUG
 
   }
 
