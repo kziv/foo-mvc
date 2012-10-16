@@ -4,7 +4,7 @@ Each folder in this directory represents a different FooMVC app. This allows you
 
 EXAMPLE
 
-See the ExampleApp folder for sample files
+See the ExampleApp folder for sample files.
 
 
 

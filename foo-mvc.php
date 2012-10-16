@@ -58,7 +58,9 @@ class FooMVC {
     }
 
     $router = new Router(self::$route_file);
-    $controller_name = $router->url2controller($_SERVER['REQUEST_URI']);
+    if (!$controller_name = $router->url2controller($_SERVER['REQUEST_URI'])) {
+      throw new FooMVCDispatchException("No controller specified for this route.");
+    }
     $controller_name = str_replace('.', '_', $controller_name);
     self::forward($controller_name);
 
