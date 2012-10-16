@@ -48,7 +48,7 @@ class FooMVC {
    * @param string
    *   Path to the specific application relative to the foo-mvc app dir base
    */
-  public static function dispatch($app_path=NULL) {
+  public static function dispatch($app_path = NULL) {
 
     $app_path              = dirname(__FILE__) . '/apps' . ($app_path ? '/' . $app_path : '');
     self::$dir_controllers = $app_path . '/controllers/';
@@ -285,14 +285,10 @@ abstract class FooMVCView {
 
 class Router {
 
-  protected $routes = array();
+  protected $routes    = array();
   protected $urlparams = array();
 
-  public function __construct($ini_path=NULL) {
-    // Set the default routes path
-    if (!$ini_path) {
-      $ini_path = FOO_MVC_BASE_PATH . '/routes.ini';
-    }
+  public function __construct($ini_path) {
     $this->loadRoutesFile($ini_path);
   }
 
