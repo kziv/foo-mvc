@@ -5,6 +5,9 @@
  * @author Karen Ziv <me@karenziv.com>
  */
 
+// Make sure the base path is defined
+defined('FOO_MVC_BASE_PATH') or define('FOO_MVC_BASE_PATH', 'apps');
+
 /**
  * Pretty debug output
  */
