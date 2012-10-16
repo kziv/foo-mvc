@@ -158,9 +158,6 @@ class FooMVC {
     if (!is_subclass_of($view_name, 'FooMVCView')) { // View extends base view
       throw new FooMVCDispatchException ("View '$view_name' must extend FooMVCView");
     }
-    if (!method_exists($view_name, 'render')) { // View has appropriate method
-      throw new FooMVCDispatchException ("View '$view_name' has no render() method");
-    }
 
     // Load the view class and render
     $view = new $view_name();
@@ -281,6 +278,10 @@ abstract class FooMVCView {
 
   protected $data = array(); // Data packet to send to template
 
+  /**
+   * Main rendering block. Must be implemented by child class.
+   */
+  abstract function render();
 }
 
 class Router {
