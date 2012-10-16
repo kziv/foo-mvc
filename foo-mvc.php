@@ -144,7 +144,7 @@ class FooMVC {
 
     // Load the view file
     self::$current_view = strtolower(self::$current_view);
-    $view_path = self::$dir_views . str_replace('_', '/', self::$current_view) . '.php';
+    $view_path = self::$dir_views . str_replace('_', '/', self::$current_view) . '.inc';
     if (!file_exists($view_path)) {
       throw new FooMVCDispatchException("View file expected at '$view_path'");
     }
